@@ -16,15 +16,43 @@
 
 package org.acme.wedding.service;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import javax.enterprise.context.ApplicationScoped;
 
+import org.acme.wedding.Guest;
 import org.acme.wedding.WeddingSolution;
+import org.acme.wedding.constraints.WeddingConstraintProvider;
+import org.optaplanner.core.api.solver.Solver;
+import org.optaplanner.core.api.solver.SolverFactory;
+import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
+import org.optaplanner.core.config.solver.SolverConfig;
+import org.optaplanner.core.config.solver.termination.TerminationConfig;
 
 @ApplicationScoped
 public class WeddingSolveService {
 
     public WeddingSolution assignSeats(WeddingSolution weddingPlan) {
         System.out.println("I am solving!");
+        
+        SolverFactory<WeddingSolution> solverFactory = SolverFactory.createEmpty();
+        SolverConfig solverConfig = solverFactory.getSolverConfig();
+
+        solverConfig.withSolutionClass(WeddingSolution.class)
+                .withEntityClassList(Arrays.asList(Guest.class))
+                .withScoreDirectorFactory(
+                        new ScoreDirectorFactoryConfig().withConstraintProviderClass(WeddingConstraintProvider.class)
+                )
+                .withTerminationConfig(new TerminationConfig()
+                        .withSecondsSpentLimit(5L));
+
+        Solver<WeddingSolution> solver = solverFactory.buildSolver();
+
+        
+        weddingPlan = solver.solve(weddingPlan);
+        System.out.println("I am  done solving!");
+     
         return weddingPlan;
     }
 

@@ -10,7 +10,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <kogito.version>8.0.0-SNAPSHOT</kogito.version>
     <maven.compiler.source>1.8</maven.compiler.source>
-    <quarkus.version>999-SNAPSHOT</quarkus.version>
+    <quarkus.version>0.27.0</quarkus.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
@@ -98,6 +98,23 @@
       </plugin>
     </plugins>
   </build>
+  <repositories>
+    <!-- Bootstrap repository to locate the parent pom when the parent pom has not been build locally. -->
+    <repository>
+      <id>jboss-public-repository-group</id>
+      <name>JBoss Public Repository Group</name>
+      <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+      <layout>default</layout>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
   <profiles>
     <profile>
       <id>native</id>

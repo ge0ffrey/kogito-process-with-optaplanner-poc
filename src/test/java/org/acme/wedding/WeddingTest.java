@@ -48,12 +48,9 @@ public class WeddingTest {
         assertNotNull(weddingSolution);
 
         weddingSolution.getGuestList().stream().collect(Collectors.groupingBy(Guest::getTable, Collectors.toList()))
-        .forEach((table, guests) -> {
-            System.out.println("Table");
-            for (Guest guest : guests) {
-                System.out.println("  " + guest.getName());
-            }
-        });
+                .forEach((table, guests) -> {
+                    System.out.println("Table: " + guests.stream().map(Guest::getName).collect(Collectors.joining(", ")));
+                });
     }
 
 
